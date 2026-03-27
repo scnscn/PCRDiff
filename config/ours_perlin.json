@@ -1,0 +1,137 @@
+{
+    "name": "naf_mul_swin_maskex_correct_interval_200_278_100",
+    "gpu_ids": [
+        1
+    ],
+    "seed": -1,
+    "finetune_norm": false,
+    "path": {
+        "base_dir": "experiments",
+        "code": "code",
+        "tb_logger": "tb_logger",
+        "results": "results",
+        "checkpoint": "checkpoint",
+        "resume_state": "pretrained/pcrdiff_new"
+    },
+    "datasets": {
+        "train": {
+            "which_dataset": {
+                "name": [
+                    "data.dataset",
+                    "Sen2_MTC_New_Multi"
+                ],
+                "args": {
+                    "data_root": "dataset/new",
+                    "mode": "train"
+                }
+            },
+            "dataloader": {
+                "validation_split": 2,
+                "args": {
+                    "batch_size":2,
+                    "num_workers": 2,
+                    "shuffle": true,
+                    "pin_memory": true,
+                    "drop_last": true,
+                    "persistent_workers":true
+                },
+                "val_args": {
+                    "batch_size": 1,
+                    "num_workers": 1,
+                    "shuffle": false,
+                    "pin_memory": true,
+                    "drop_last": false
+                }
+            }
+        },
+        "val": {
+            "which_dataset": {
+                "name": "Sen2_MTC_New_Multi",
+                "args": {
+                    "data_root": "dataset/new",
+                    "mode": "val"
+                }
+            }
+        },
+        "test": {
+            "which_dataset": {
+                "name": "Sen2_MTC_New_Multi",
+                "args": {
+                    "data_root": "dataset/new",
+                    "mode": "test"
+                }
+            },
+            "dataloader": {
+                "args": {
+                    "batch_size": 1,
+                    "num_workers": 0,
+                    "pin_memory": true
+                }
+            }
+        }
+    },
+    "model": {
+        "which_model": {
+            "name": [
+                "models.model",
+                "Palette"
+            ],
+            "args": {
+                "sample_num": 8,
+                "task": "decloud",
+                "ema_scheduler": {
+                    "ema_start": 1,
+                    "ema_iter": 1,
+                    "ema_decay": 0.9999
+                },
+                "optimizers": [
+                    {
+                        "lr": 5e-05,
+                        "weight_decay": 0
+                    }
+                ]
+            }
+        },
+        "which_networks": [
+            {
+                "name": [
+                    "models.network_x0_perlin",
+                    "Network"
+                ],
+                "args": {
+                    "init_type": "kaiming",
+                    "module_name": "naf_mul_swin",
+                    "unet": {
+                        "img_channel": 3,
+                        "width": 64,
+                        "middle_blk_num": 1,
+                        "enc_blk_nums": [1, 1, 1, 1],
+                        "dec_blk_nums": [1, 1, 1, 1]
+                    }
+                    
+                    
+                }
+            }
+        ],
+        "which_losses": [
+            "multi_loss"
+        ],
+        "which_metrics": [
+            "mae"
+        ]
+    },
+    "train": {
+        "n_epoch": 150,
+        "n_iter": 10000000,
+        "val_epoch": 10,
+        "save_checkpoint_epoch": 10,
+        "log_iter": 10000,
+        "tensorboard": true
+    },
+    "debug": {
+        "val_epoch": 1,
+        "save_checkpoint_epoch": 1,
+        "log_iter": 10,
+        "debug_split": 50
+    }
+}

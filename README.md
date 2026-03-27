@@ -1,5 +1,5 @@
 <div align="center">
-<h1 align="center">DiffCR: A Fast Conditional Diffusion Framework for Cloud Removal from Optical Satellite Images</h1>
+<h1 align="center">PCRDiff: A Perlin Noise-Based Cloud Removal Diffusion Model for Remote Sensing Images</h1>
 
 ![PCRDiff](pcrdiff.png)
 
